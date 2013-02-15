@@ -17,4 +17,4 @@ tapped, so I threw this together. It's crappy, but it seems to be working.
 
 ## Usage
 
-* After configuring your notification list and ChangeDetectors in ChangeChecker.php, just run `php change.php`.
+* After configuring your notification list and ChangeDetectors in ChangeChecker.php, just run `php check.php`.
