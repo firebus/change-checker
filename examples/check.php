@@ -2,7 +2,7 @@
 
 function __autoload($class) {
 	$class = str_replace('\\', DIRECTOR_SEPARATOR, $class);
-	require_once("$class.php");
+	require_once("library/$class.php");
 }
 
 $changeDetectorsConfiguration = array(
