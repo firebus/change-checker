@@ -1,13 +1,9 @@
 <?php
 
-require_once('IChangeDetector.php');
-require_once('class.Diff.php');
-require_once('Logger.php');
-
 /**
  * ChangeDetectorPage
  */
-class ChangeDetectorPage implements IChangeDetector {
+class ChangeDetectorPage implements firebus\change_checker\IChangeDetector {
 	private $changeFile;
 	private $resource;
 	
@@ -17,12 +13,12 @@ class ChangeDetectorPage implements IChangeDetector {
 	}
 	
 	public function detect() {
-		Logger::log("processing " . $this->resource);
+		firebus\logger\Logger::log("processing " . $this->resource);
 		$lastChange = $this->retrieveLastChange();
 		$page = file_get_contents($this->resource);
 		$results = array();
 
-		$comparison = Diff::toString(Diff::compare($lastChange, $page));
+		$comparison = stephen_morley\diff\Diff::toString(stephen_morley\diff\Diff::compare($lastChange, $page));
 		$lines = explode('\n', $comparison);
 		$diff = '';
 		foreach ($lines as $line) {
