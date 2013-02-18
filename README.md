@@ -6,7 +6,6 @@ tapped, so I threw this library together.
 
 ## Things that are lame
 
-* I don't really know why that interface is there either.
 * Data is persisted in text files, one per ChangeDetector. The text files are created in the directory you run the script from.
 
 ## Acknowledgements

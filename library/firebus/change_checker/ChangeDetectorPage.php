@@ -17,22 +17,25 @@ class ChangeDetectorPage implements IChangeDetector {
 	public function detect() {
 		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing " . $this->resource);
 		$lastChange = $this->retrieveLastChange();
-		$page = file_get_contents($this->resource);
 		$results = array();
+		$page = @file_get_contents($this->resource);
 
-		$comparison = \stephen_morley\diff\Diff::toString(\stephen_morley\diff\Diff::compare($lastChange, $page));
-		$lines = explode('\n', $comparison);
-		$diff = '';
-		foreach ($lines as $line) {
-			if (strpos($line, '+') === 0) {
-				$diff .= "$line\n";
+		if ($page === FALSE) {
+			\firebus\logger\Logger::log(\firebus\logger\Logger::WARNING, "failed to get page at " . $this->resource);
+		} else {
+			$comparison = \stephen_morley\diff\Diff::toString(\stephen_morley\diff\Diff::compare($lastChange, $page));
+			$lines = explode('\n', $comparison);
+			$diff = '';
+			foreach ($lines as $line) {
+				if (strpos($line, '+') === 0) {
+					$diff .= "$line\n";
+				}
+			}
+			if ($diff) {
+				$results[] = array('text' => $diff, 'url' => $this->resource);
+				$this->storeLastChange($page);
 			}
 		}
-		if ($diff) {
-			$results[] = array('text' => $diff, 'url' => $this->resource);
-			$this->storeLastChange($page);
-		}
-		
 		return $results;
 	}
 	

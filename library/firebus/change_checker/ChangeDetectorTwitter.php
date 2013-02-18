@@ -22,24 +22,30 @@ class ChangeDetectorTwitter implements IChangeDetector {
 		$maxId = $lastId;
 		$results = array();
 
-		$dom->loadXML(file_get_contents($url));
-		foreach ($dom->getElementsByTagName('status') as $status) {
-			$ids = $status->getElementsByTagName('id');
-			$id = $ids->item(0)->textContent;
-			$texts = $status->getElementsByTagName('text');
-			$text = $texts->item(0)->textContent;
-			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing tweet $id $text");
-			if ($id > $lastId) {
-				if ($id > $maxId) {
-					$maxId = $id;
+		$statuses = @file_get_contents($url);
+		
+		if ($statuses === FALSE) {
+			\firebus\logger\Logger::log(\firebus\logger\Logger::WARNING, "failed to get statuses for " . $this->resource);
+		} else {
+			$dom->loadXML($statuses);
+			foreach ($dom->getElementsByTagName('status') as $status) {
+				$ids = $status->getElementsByTagName('id');
+				$id = $ids->item(0)->textContent;
+				$texts = $status->getElementsByTagName('text');
+				$text = $texts->item(0)->textContent;
+				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing tweet $id $text");
+				if ($id > $lastId) {
+					if ($id > $maxId) {
+						$maxId = $id;
+					}
+					$results[] = array('text' => $text, 'url' => $this->makeStatusUrl($id));
+				} else {
+					\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "$id is not > $lastId");
+					break;
 				}
-				$results[] = array('text' => $text, 'url' => $this->makeStatusUrl($id));
-			} else {
-				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "$id is not > $lastId");
-				break;
 			}
+			$this->storeLastChange($maxId);
 		}
-		$this->storeLastChange($maxId);
 		
 		return $results;
 	}

@@ -3,7 +3,6 @@
 function __autoload($class) {
 	$class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 	$file = __DIR__ . "/library/$class.php";
-	error_log($file);
 	if (is_file($file)) {
 		require_once(__DIR__ . "/library/$class.php");
 	}
