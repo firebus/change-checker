@@ -40,7 +40,7 @@ class ChangeChecker {
 		}
 		
 		foreach ($results as $result) {
-			firebus\logger\Logger::log("checking " . $result['text']);
+			firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "checking " . $result['text']);
 			if (stripos($result['text'], $this->searchString) !== FALSE) {
 				$message = "A change at $result[url] contained the search string $this->searchString. We thought you'd like to know.";
 				$this->alert($this->changeAlertList, $message);

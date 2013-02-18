@@ -13,7 +13,7 @@ class ChangeDetectorPage implements firebus\change_checker\IChangeDetector {
 	}
 	
 	public function detect() {
-		firebus\logger\Logger::log("processing " . $this->resource);
+		firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "processing " . $this->resource);
 		$lastChange = $this->retrieveLastChange();
 		$page = file_get_contents($this->resource);
 		$results = array();

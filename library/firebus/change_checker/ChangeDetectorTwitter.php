@@ -16,7 +16,7 @@ class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
 		$dom = new DOMDocument;
 		$url = $this->makeURL();
 		$lastId = $this->retrieveLastChange();
-		firebus\logger\Logger::log("last id: $lastId");
+		firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "last id: $lastId");
 		$maxId = $lastId;
 		$results = array();
 
@@ -26,14 +26,14 @@ class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
 			$id = $ids->item(0)->textContent;
 			$texts = $status->getElementsByTagName('text');
 			$text = $texts->item(0)->textContent;
-			firebus\logger\Logger::log("processing tweet $id $text");
+			firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "processing tweet $id $text");
 			if ($id > $lastId) {
 				if ($id > $maxId) {
 					$maxId = $id;
 				}
 				$results[] = array('text' => $text, 'url' => $this->makeStatusUrl($id));
 			} else {
-				firebus\logger\Logger::log("$id is not > $lastId");
+				firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "$id is not > $lastId");
 				break;
 			}
 		}

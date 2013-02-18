@@ -13,5 +13,7 @@ $alwaysAlertList = array('admin@example.org');
 $changeAlertList = array('someguy@example.com');
 $searchString = 'fascinating topic';
 
+firebus\logger\Logger::setDebug(TRUE);
+
 $changeChecker = new firebus\change_checker\ChangeChecker($changeDetectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString);
 $changeChecker->check();
