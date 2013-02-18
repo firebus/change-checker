@@ -1,5 +1,7 @@
 <?php
 
+namespace firebus\change_checker;
+
 /**
  * This is the main class. It registers ChangeDetectors, parses their results for changes, and alerts if necessary
  */
@@ -15,7 +17,8 @@ class ChangeChecker {
 	private $changeDetectorCollection = array();
 	
 	/**
-	 *
+	 * Constructor
+	 * 
 	 * @param array $changeDetectorsConfiguration and array of change detector configuration arrays
 	 * Each configuration array has these keys:
 	 * - type: (e.g. Twitter or Page, should match the suffix of a class that implements the ChangeDetector interface
@@ -29,7 +32,7 @@ class ChangeChecker {
 		list($this->alwaysAlertList, $this->changeAlertList, $this->searchString) =
 			array($alwaysAlertList, $changeAlertList, $searchString);
 		foreach ($changeDetectorsConfiguration as $cd) {
-			$this->changeDetectorCollection[] = firebus\change_checker\ChangeDetectorFactory::create($cd['type'], $cd['resource'], $cd['id']);
+			$this->changeDetectorCollection[] = ChangeDetectorFactory::create($cd['type'], $cd['resource'], $cd['id']);
 		}
 	}
 	
@@ -40,7 +43,7 @@ class ChangeChecker {
 		}
 		
 		foreach ($results as $result) {
-			firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "checking " . $result['text']);
+			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "checking " . $result['text']);
 			if (stripos($result['text'], $this->searchString) !== FALSE) {
 				$message = "A change at $result[url] contained the search string $this->searchString. We thought you'd like to know.";
 				$this->alert($this->changeAlertList, $message);

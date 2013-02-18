@@ -1,5 +1,7 @@
 <?php
 
+namespace firebus\logger;
+
 /**
  * Just a logger class.
  */
@@ -24,7 +26,7 @@ class Logger {
 	}
 
 	public static function setDebug($debug) {
-		$self::$debug = $debug;
+		self::$debug = $debug;
 	}
 	
 	public function log($level, $message) {

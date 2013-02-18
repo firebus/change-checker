@@ -1,5 +1,7 @@
 <?php
 
+namespace firebus\change_checker;
+
 /**
  * Define the ChangeDetector Interface
  */

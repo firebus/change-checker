@@ -1,8 +1,12 @@
 <?php
 
 function __autoload($class) {
-	$class = str_replace('\\', DIRECTOR_SEPARATOR, $class);
-	require_once("library/$class.php");
+	$class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+	$file = __DIR__ . "/library/$class.php";
+	error_log($file);
+	if (is_file($file)) {
+		require_once(__DIR__ . "/library/$class.php");
+	}
 }
 
 $changeDetectorsConfiguration = array(
@@ -13,7 +17,7 @@ $alwaysAlertList = array('admin@example.org');
 $changeAlertList = array('someguy@example.com');
 $searchString = 'fascinating topic';
 
-firebus\logger\Logger::setDebug(TRUE);
+\firebus\logger\Logger::setDebug(TRUE);
 
-$changeChecker = new firebus\change_checker\ChangeChecker($changeDetectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString);
+$changeChecker = new \firebus\change_checker\ChangeChecker($changeDetectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString);
 $changeChecker->check();

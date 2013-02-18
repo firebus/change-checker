@@ -1,9 +1,11 @@
 <?php
 
+namespace firebus\change_checker;
+
 /**
  * ChangeDetectorTwitter
  */
-class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
+class ChangeDetectorTwitter implements IChangeDetector {
 	private $changeFile;
 	private $resource;
 	
@@ -13,10 +15,10 @@ class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
 	}
 	
 	public function detect() {
-		$dom = new DOMDocument;
+		$dom = new \DOMDocument;
 		$url = $this->makeURL();
 		$lastId = $this->retrieveLastChange();
-		firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "last id: $lastId");
+		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "last id: $lastId");
 		$maxId = $lastId;
 		$results = array();
 
@@ -26,14 +28,14 @@ class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
 			$id = $ids->item(0)->textContent;
 			$texts = $status->getElementsByTagName('text');
 			$text = $texts->item(0)->textContent;
-			firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "processing tweet $id $text");
+			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing tweet $id $text");
 			if ($id > $lastId) {
 				if ($id > $maxId) {
 					$maxId = $id;
 				}
 				$results[] = array('text' => $text, 'url' => $this->makeStatusUrl($id));
 			} else {
-				firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "$id is not > $lastId");
+				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "$id is not > $lastId");
 				break;
 			}
 		}
@@ -47,7 +49,11 @@ class ChangeDetectorTwitter implements firebus\change_checker\IChangeDetector {
 	}
 	
 	private function retrieveLastChange() {
-		return file_get_contents($this->changeFile);
+		if (is_file($this->changeFile)) {
+			return file_get_contents($this->changeFile);
+		} else {
+			return '';
+		}
 	}
 	
 	private function makeURL() {

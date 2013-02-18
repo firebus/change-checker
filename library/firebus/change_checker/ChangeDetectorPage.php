@@ -1,9 +1,11 @@
 <?php
 
+namespace firebus\change_checker;
+
 /**
  * ChangeDetectorPage
  */
-class ChangeDetectorPage implements firebus\change_checker\IChangeDetector {
+class ChangeDetectorPage implements IChangeDetector {
 	private $changeFile;
 	private $resource;
 	
@@ -13,12 +15,12 @@ class ChangeDetectorPage implements firebus\change_checker\IChangeDetector {
 	}
 	
 	public function detect() {
-		firebus\logger\Logger::log(firebus\logger\Logger::DEBUG, "processing " . $this->resource);
+		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing " . $this->resource);
 		$lastChange = $this->retrieveLastChange();
 		$page = file_get_contents($this->resource);
 		$results = array();
 
-		$comparison = stephen_morley\diff\Diff::toString(stephen_morley\diff\Diff::compare($lastChange, $page));
+		$comparison = \stephen_morley\diff\Diff::toString(\stephen_morley\diff\Diff::compare($lastChange, $page));
 		$lines = explode('\n', $comparison);
 		$diff = '';
 		foreach ($lines as $line) {
@@ -39,6 +41,10 @@ class ChangeDetectorPage implements firebus\change_checker\IChangeDetector {
 	}
 	
 	private function retrieveLastChange() {
-		return file_get_contents($this->changeFile);
+		if (is_file($this->changeFile)) {
+			return file_get_contents($this->changeFile);
+		} else {
+			return '';
+		}
 	}
 }

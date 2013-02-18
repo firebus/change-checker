@@ -1,5 +1,7 @@
 <?php
 
+namespace stephen_morley\diff;
+
 /*
 
 class.Diff.php
