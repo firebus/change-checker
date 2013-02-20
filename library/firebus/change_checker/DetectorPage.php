@@ -3,9 +3,9 @@
 namespace firebus\change_checker;
 
 /**
- * ChangeDetectorPage
+ * DetectorPage
  */
-class ChangeDetectorPage extends AChangeDetector {
+class DetectorPage extends ADetector {
 
 	public function detect() {
 		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing " . $this->resource);

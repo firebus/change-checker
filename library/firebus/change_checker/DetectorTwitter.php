@@ -3,9 +3,9 @@
 namespace firebus\change_checker;
 
 /**
- * ChangeDetectorTwitter
+ * DetectorTwitter
  */
-class ChangeDetectorTwitter extends AChangeDetector {
+class DetectorTwitter extends ADetector {
 	
 	public function detect() {
 		$dom = new \DOMDocument;

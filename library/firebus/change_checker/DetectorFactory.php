@@ -3,11 +3,11 @@
 namespace firebus\change_checker;
 
 /**
- * Base ChangeDetector class
+ * DetectorFactory
  */
-class ChangeDetectorFactory {
+class DetectorFactory {
 	public static function create($type, $resource, $id) {
-		$cdClass = "firebus\change_checker\ChangeDetector$type";
+		$cdClass = "firebus\change_checker\Detector$type";
 		return new $cdClass($resource, $id);
 	}
 }

@@ -3,7 +3,7 @@
 namespace firebus\change_checker;
 
 /**
- * This is the main class. It registers ChangeDetectors, parses their results for changes, and alerts if necessary
+ * This is the main class. It registers Detectors, parses their results for changes, and alerts if necessary
  */
 
 class ChangeChecker {
@@ -14,31 +14,31 @@ class ChangeChecker {
 	/** @var string text to search for in changes */
 	private $searchString;
 	/** @var array change detectors to check */
-	private $changeDetectorCollection = array();
+	private $detectorCollection = array();
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param array $changeDetectorsConfiguration and array of change detector configuration arrays
+	 * @param array $detectorsConfiguration and array of change detector configuration arrays
 	 * Each configuration array has these keys:
-	 * - type: (e.g. Twitter or Page, should match the suffix of a class that implements the ChangeDetector interface
-	 * - resource: (e.g. a full URL or twitter screen name) in a format that the given ChangeDetector type will understand
-	 * - id: a unique string to identify this ChangeDetector. Will be used when constructing a save file
+	 * - type: (e.g. Twitter or Page, should match the suffix of a class that extends the ADetector base class
+	 * - resource: (e.g. a full URL or twitter screen name) in a format that the given Detector type will understand
+	 * - id: a unique string to identify this Detector. Will be used when constructing a save file
 	 * @param array $alwaysAlertList email addresses to alert on all checks
 	 * @param array $changeAlertList email addresses to alert on each change that matches the search string
 	 * @param string $searchString an string to search for in changes
 	 */
-	public function __construct($changeDetectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString) {
+	public function __construct($detectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString) {
 		list($this->alwaysAlertList, $this->changeAlertList, $this->searchString) =
 			array($alwaysAlertList, $changeAlertList, $searchString);
-		foreach ($changeDetectorsConfiguration as $cd) {
-			$this->changeDetectorCollection[] = ChangeDetectorFactory::create($cd['type'], $cd['resource'], $cd['id']);
+		foreach ($detectorsConfiguration as $cd) {
+			$this->detectorCollection[] = DetectorFactory::create($cd['type'], $cd['resource'], $cd['id']);
 		}
 	}
 	
 	public function check() {
 		$results = array();
-		foreach ($this->changeDetectorCollection as $cd) {
+		foreach ($this->detectorCollection as $cd) {
 			$results += $cd->detect();
 		}
 		
