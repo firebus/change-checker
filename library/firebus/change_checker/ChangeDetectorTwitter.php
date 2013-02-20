@@ -5,10 +5,8 @@ namespace firebus\change_checker;
 /**
  * ChangeDetectorTwitter
  */
-class ChangeDetectorTwitter implements IChangeDetector {
-	private $changeFile;
-	private $resource;
-	
+class ChangeDetectorTwitter extends AChangeDetector {
+
 	public function __construct($resource, $id) {
 		$this->resource = $resource;
 		$this->changeFile = "twitter-$id";
@@ -48,18 +46,6 @@ class ChangeDetectorTwitter implements IChangeDetector {
 		}
 		
 		return $results;
-	}
-	
-	private function storeLastChange($lastChange) {
-		file_put_contents($this->changeFile, $lastChange);
-	}
-	
-	private function retrieveLastChange() {
-		if (is_file($this->changeFile)) {
-			return file_get_contents($this->changeFile);
-		} else {
-			return '';
-		}
 	}
 	
 	private function makeURL() {

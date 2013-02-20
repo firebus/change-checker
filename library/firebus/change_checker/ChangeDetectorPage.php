@@ -5,10 +5,7 @@ namespace firebus\change_checker;
 /**
  * ChangeDetectorPage
  */
-class ChangeDetectorPage implements IChangeDetector {
-	private $changeFile;
-	private $resource;
-	
+class ChangeDetectorPage extends AChangeDetector {
 	public function __construct($resource, $id) {
 		$this->resource = $resource;
 		$this->changeFile = "page-$id";
@@ -37,17 +34,5 @@ class ChangeDetectorPage implements IChangeDetector {
 			}
 		}
 		return $results;
-	}
-	
-	private function storeLastChange($lastChange) {
-		file_put_contents($this->changeFile, $lastChange);
-	}
-	
-	private function retrieveLastChange() {
-		if (is_file($this->changeFile)) {
-			return file_get_contents($this->changeFile);
-		} else {
-			return '';
-		}
 	}
 }
