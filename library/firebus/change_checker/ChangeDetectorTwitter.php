@@ -6,11 +6,6 @@ namespace firebus\change_checker;
  * ChangeDetectorTwitter
  */
 class ChangeDetectorTwitter extends AChangeDetector {
-
-	public function __construct($resource, $id) {
-		$this->resource = $resource;
-		$this->changeFile = "twitter-$id";
-	}
 	
 	public function detect() {
 		$dom = new \DOMDocument;

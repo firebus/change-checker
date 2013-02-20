@@ -6,11 +6,7 @@ namespace firebus\change_checker;
  * ChangeDetectorPage
  */
 class ChangeDetectorPage extends AChangeDetector {
-	public function __construct($resource, $id) {
-		$this->resource = $resource;
-		$this->changeFile = "page-$id";
-	}
-	
+
 	public function detect() {
 		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing " . $this->resource);
 		$lastChange = $this->retrieveLastChange();
