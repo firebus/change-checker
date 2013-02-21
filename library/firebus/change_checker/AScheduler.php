@@ -7,13 +7,13 @@ namespace firebus\change_checker;
  */
 abstract class AScheduler {
 	
+	abstract public function schedule();
 	
-	
-	public function setRunTime($runTimeFile) {
+	private function setRunTime($runTimeFile) {
 		file_put_contents($runTimeFile, time());
 	}
 	
-	public function getRunTime($runTimeFile) {
+	private function getRunTime($runTimeFile) {
 		if (is_file($runTimeFile)) {
 			return file_get_contents($runTimeFile);
 		} else {

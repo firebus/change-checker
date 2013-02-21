@@ -15,6 +15,8 @@ class ChangeChecker {
 	private $searchString;
 	/** @var array detectors to check, keyed by type */
 	private $detectorCollection = array();
+	/** @var array schedulers to consult, keyed by type */
+	private $schedulerCollection = array();
 	
 	/**
 	 * Constructor
@@ -35,14 +37,22 @@ class ChangeChecker {
 			foreach ($detectors as $detector) {
 				$this->detectorCollection[$type][] = DetectorFactory::create($type, $detector['resource'], $detector['id']);
 			}
+			$schedulerClass = "firebus\change_checker\Scheduler$type";
+			if (class_exists($schedulerClass)) {
+				$this->schedulerCollection[$type] = new $schedulerClass;
+			} else {
+				
+			}
 		}
 	}
 	
 	public function check() {
 		$results = array();
-		foreach ($this->detectorCollection as $type) {
-			foreach ($type as $detector) {
-				$results += $detector->detect();
+		foreach ($this->detectorCollection as $type => $detectors) {
+			if (!array_key_exists($type, $this->schedulerCollection) || $this->schedulerCollection[$type]->schedule()) {
+				foreach ($detectors as $detector) {
+					$results += $detector->detect();
+				}
 			}
 		}
 		
