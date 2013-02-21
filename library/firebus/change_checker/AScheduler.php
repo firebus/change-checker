@@ -23,7 +23,6 @@ abstract class AScheduler {
 	
 	protected function getRunTime() {
 		if (is_file($this->runTimeFile)) {
-			error_log('file_exists');
 			return file_get_contents($this->runTimeFile);
 		} else {
 			return 0;
