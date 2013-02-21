@@ -8,9 +8,13 @@ function __autoload($class) {
 	}
 }
 
-$changeDetectorsConfiguration = array(
-	array('type' => 'Page', 'resource' => 'http://example.com/secret-blog', 'id' => 'secret-blog'),
-	array('type' => 'Twitter', 'resource' => 'example', 'id' => 'example'),
+$detectorsConfiguration = array(
+	'Page' => array(
+		array('resource' => 'http://example.com/secret-blog', 'id' => 'example-page'),
+	),
+	'Twitter' => array(
+		array('resource' => 'exampleScreenname', 'id' => 'example-screenname'),
+	),
 );
 $alwaysAlertList = array('admin@example.org');
 $changeAlertList = array('someguy@example.com');
@@ -18,5 +22,5 @@ $searchString = 'fascinating topic';
 
 \firebus\logger\Logger::setDebug(TRUE);
 
-$changeChecker = new \firebus\change_checker\ChangeChecker($changeDetectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString);
+$changeChecker = new \firebus\change_checker\ChangeChecker($detectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString);
 $changeChecker->check();

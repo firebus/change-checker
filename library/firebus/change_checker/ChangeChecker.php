@@ -13,15 +13,15 @@ class ChangeChecker {
 	private $changeAlertList;
 	/** @var string text to search for in changes */
 	private $searchString;
-	/** @var array change detectors to check */
+	/** @var array detectors to check, keyed by type */
 	private $detectorCollection = array();
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param array $detectorsConfiguration and array of change detector configuration arrays
-	 * Each configuration array has these keys:
-	 * - type: (e.g. Twitter or Page, should match the suffix of a class that extends the ADetector base class
+	 * @param array $detectorsConfiguration configures your detectors. It's an array keyed by detector type
+	 * Each type is an array of detector configurations (so you can spin up more than one detector of each type)
+	 * Each detector configuration has these keys:
 	 * - resource: (e.g. a full URL or twitter screen name) in a format that the given Detector type will understand
 	 * - id: a unique string to identify this Detector. Will be used when constructing a save file
 	 * @param array $alwaysAlertList email addresses to alert on all checks
@@ -31,15 +31,19 @@ class ChangeChecker {
 	public function __construct($detectorsConfiguration, $alwaysAlertList, $changeAlertList, $searchString) {
 		list($this->alwaysAlertList, $this->changeAlertList, $this->searchString) =
 			array($alwaysAlertList, $changeAlertList, $searchString);
-		foreach ($detectorsConfiguration as $cd) {
-			$this->detectorCollection[] = DetectorFactory::create($cd['type'], $cd['resource'], $cd['id']);
+		foreach ($detectorsConfiguration as $type => $detectors) {
+			foreach ($detectors as $detector) {
+				$this->detectorCollection[$type][] = DetectorFactory::create($type, $detector['resource'], $detector['id']);
+			}
 		}
 	}
 	
 	public function check() {
 		$results = array();
-		foreach ($this->detectorCollection as $cd) {
-			$results += $cd->detect();
+		foreach ($this->detectorCollection as $type) {
+			foreach ($type as $detector) {
+				$results += $detector->detect();
+			}
 		}
 		
 		foreach ($results as $result) {
