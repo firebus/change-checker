@@ -7,15 +7,24 @@ namespace firebus\change_checker;
  */
 abstract class AScheduler {
 	
-	abstract public function schedule();
+	protected $detectorCount;
+	protected $runTimeFile;
 	
-	private function setRunTime($runTimeFile) {
-		file_put_contents($runTimeFile, time());
+	public function __construct($detectorCount, $type) {
+		$this->detectorCount = $detectorCount;
+		$this->runTimeFile = "$type-runtime";
 	}
 	
-	private function getRunTime($runTimeFile) {
-		if (is_file($runTimeFile)) {
-			return file_get_contents($runTimeFile);
+	abstract public function schedule();
+	
+	protected function setRunTime($runTime) {
+		file_put_contents($this->runTimeFile, $runTime);
+	}
+	
+	protected function getRunTime() {
+		if (is_file($this->runTimeFile)) {
+			error_log('file_exists');
+			return file_get_contents($this->runTimeFile);
 		} else {
 			return 0;
 		}

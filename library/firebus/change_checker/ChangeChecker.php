@@ -34,22 +34,19 @@ class ChangeChecker {
 		list($this->alwaysAlertList, $this->changeAlertList, $this->searchString) =
 			array($alwaysAlertList, $changeAlertList, $searchString);
 		foreach ($detectorsConfiguration as $type => $detectors) {
+			$detectorCount = 0;
 			foreach ($detectors as $detector) {
 				$this->detectorCollection[$type][] = DetectorFactory::create($type, $detector['resource'], $detector['id']);
+				$detectorCount++;
 			}
-			$schedulerClass = "firebus\change_checker\Scheduler$type";
-			if (class_exists($schedulerClass)) {
-				$this->schedulerCollection[$type] = new $schedulerClass;
-			} else {
-				
-			}
+			$this->schedulerCollection[$type] = SchedulerFactory::create($type, $detectorCount);
 		}
 	}
 	
 	public function check() {
 		$results = array();
 		foreach ($this->detectorCollection as $type => $detectors) {
-			if (!array_key_exists($type, $this->schedulerCollection) || $this->schedulerCollection[$type]->schedule()) {
+			if (!isset($type, $this->schedulerCollection[$type]) || $this->schedulerCollection[$type]->schedule()) {
 				foreach ($detectors as $detector) {
 					$results += $detector->detect();
 				}
@@ -59,6 +56,7 @@ class ChangeChecker {
 		foreach ($results as $result) {
 			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "checking " . $result['text']);
 			if (stripos($result['text'], $this->searchString) !== FALSE) {
+				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "hit! " . $result['text']);
 				$message = "A change at $result[url] contained the search string $this->searchString. We thought you'd like to know.";
 				$this->alert($this->changeAlertList, $message);
 			}

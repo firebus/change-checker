@@ -7,7 +7,7 @@ namespace firebus\change_checker;
  */
 class DetectorFactory {
 	public static function create($type, $resource, $id) {
-		$cdClass = "firebus\change_checker\Detector$type";
-		return new $cdClass($resource, $id);
+		$detectorClass = "firebus\change_checker\Detector$type";
+		return new $detectorClass($resource, $id);
 	}
 }
