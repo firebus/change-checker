@@ -14,4 +14,4 @@ tapped, so I threw this library together.
 
 ## Usage
 
-* See examples/check.php for one way to use this library
+* See example.php for one way to use this library
