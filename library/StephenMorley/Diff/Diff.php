@@ -1,6 +1,6 @@
 <?php
 
-namespace stephen_morley\diff;
+namespace StephenMorley\Diff\Diff;
 
 /*
 

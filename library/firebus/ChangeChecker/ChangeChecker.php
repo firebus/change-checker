@@ -1,6 +1,6 @@
 <?php
 
-namespace firebus\change_checker;
+namespace firebus\ChangeChecker;
 
 /**
  * This is the main class. It registers Detectors, parses their results for changes, and alerts if necessary
@@ -54,9 +54,9 @@ class ChangeChecker {
 		}
 		
 		foreach ($results as $result) {
-			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "checking " . $result['text']);
+			\firebus\Logger\Logger::log(\firebus\Logger\Logger::DEBUG, "checking " . $result['text']);
 			if (stripos($result['text'], $this->searchString) !== FALSE) {
-				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "hit! " . $result['text']);
+				\firebus\Logger\Logger::log(\firebus\Logger\Logger::DEBUG, "hit! " . $result['text']);
 				$message = "A change at $result[url] contained the search string $this->searchString. We thought you'd like to know.";
 				$this->alert($this->changeAlertList, $message);
 			}

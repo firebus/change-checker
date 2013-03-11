@@ -1,6 +1,6 @@
 <?php
 
-namespace firebus\change_checker;
+namespace firebus\ChangeChecker;
 
 /**
  * Abstract base class for Schedulers

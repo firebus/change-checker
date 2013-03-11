@@ -1,6 +1,6 @@
 <?php
 
-namespace firebus\change_checker;
+namespace firebus\ChangeChecker;
 
 /**
  * DetectorTwitter
@@ -11,14 +11,14 @@ class DetectorTwitter extends ADetector {
 		$dom = new \DOMDocument;
 		$url = $this->makeURL();
 		$lastId = $this->retrieveLastChange();
-		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "last id: $lastId");
+		\firebus\Logger\Logger::log(\firebus\Logger\Logger::DEBUG, "last id: $lastId");
 		$maxId = $lastId;
 		$results = array();
 
 		$statuses = @file_get_contents($url);
 		
 		if ($statuses === FALSE) {
-			\firebus\logger\Logger::log(\firebus\logger\Logger::WARNING, "failed to get statuses for " . $this->resource);
+			\firebus\Logger\Logger::log(\firebus\Logger\Logger::WARNING, "failed to get statuses for " . $this->resource);
 		} else {
 			$dom->loadXML($statuses);
 			foreach ($dom->getElementsByTagName('status') as $status) {
@@ -26,14 +26,14 @@ class DetectorTwitter extends ADetector {
 				$id = $ids->item(0)->textContent;
 				$texts = $status->getElementsByTagName('text');
 				$text = $texts->item(0)->textContent;
-				\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "processing tweet $id $text");
+				\firebus\Logger\Logger::log(\firebus\Logger\Logger::DEBUG, "processing tweet $id $text");
 				if ($id > $lastId) {
 					if ($id > $maxId) {
 						$maxId = $id;
 					}
 					$results[] = array('text' => $text, 'url' => $this->makeStatusUrl($id));
 				} else {
-					\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "$id is not > $lastId");
+					\firebus\Logger\Logger::log(\firebus\Logger\Logger::DEBUG, "$id is not > $lastId");
 					break;
 				}
 			}

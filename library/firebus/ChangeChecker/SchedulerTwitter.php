@@ -1,6 +1,6 @@
 <?php
 
-namespace firebus\change_checker;
+namespace firebus\ChangeChecker;
 
 /**
  * Description of SchedulerTwitter
@@ -12,15 +12,15 @@ class SchedulerTwitter extends AScheduler {
 	public function schedule() {
 		$thisRunTime = time();
 		$lastRunTime = $this->getRunTime();
-		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "twitter lastRunTime: $lastRunTime");
+		\firebus\logger\Logger::log(\firebus\Logger\Logger::DEBUG, "twitter lastRunTime: $lastRunTime");
 		$runsPerHour = self::LIMIT_PER_HOUR / $this->detectorCount;
-		\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "twitter runsPerHour: $runsPerHour");
+		\firebus\logger\Logger::log(\firebus\Logger\Logger::DEBUG, "twitter runsPerHour: $runsPerHour");
 		
 		if ($thisRunTime - $lastRunTime > 60 * 60 / $runsPerHour) {
 			$this->setRunTime($thisRunTime);
 			return TRUE;
 		} else {
-			\firebus\logger\Logger::log(\firebus\logger\Logger::DEBUG, "it's too early to schedule twitter");
+			\firebus\logger\Logger::log(\firebus\Logger\Logger::DEBUG, "it's too early to schedule twitter");
 			return FALSE;
 		}
 	}
