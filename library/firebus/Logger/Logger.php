@@ -1,6 +1,6 @@
 <?php
 
-namespace firebus\Logger;
+namespace firebus\logger;
 
 /**
  * Just a logger class.
